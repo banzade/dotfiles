@@ -109,9 +109,11 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias cat="bat"
-alias ls="exa --icons"
-alias ll="exa -lah --icons"
+alias ls='eza --icons'         # basic ls
+alias ll='eza -l --icons'      # long listing
+alias la='eza -la --icons'     # long listing incl. hidden
+alias l='eza -l --icons'       # quick long listing
+
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

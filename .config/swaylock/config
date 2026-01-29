@@ -1,0 +1,31 @@
+# Swaylock config with wallpaper (no indicator)
+
+# Display wallpaper
+image=$HOME/.config/hypr/guts-bw.jpg
+scaling=fill
+
+# Disable unlock indicator
+no-unlock-indicator
+
+# Colors (these still work for when you type)
+inside-color=00000000
+ring-color=00000000
+line-color=00000000
+text-color=ffffff
+separator-color=00000000
+
+inside-ver-color=00000000
+ring-ver-color=00000000
+
+inside-wrong-color=ff000088
+ring-wrong-color=ff000088
+text-wrong-color=ffffff
+
+inside-clear-color=00000000
+ring-clear-color=00000000
+
+# Show failed attempts (optional)
+show-failed-attempts
+
+# Daemonize
+daemonize

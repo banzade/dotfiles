@@ -1,0 +1,75 @@
+* {
+    font-family: JetBrainsMono Nerd Font;
+    font-size: 13px;
+    outline: none;  /* Remove dashed outline */
+}
+
+window {
+    margin: 0px;
+    border: 1px solid #2a2a2a;
+    background-color: rgba(10, 10, 10, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+    outline: none;  /* Remove outline */
+}
+
+#input {
+    margin: 12px;
+    padding: 12px;
+    border: none;
+    border-bottom: 2px solid #4a4a4a;
+    background-color: transparent;
+    color: #d4d4d4;
+    outline: none;  /* Remove outline on focus */
+}
+
+#input:focus {
+    border-bottom: 2px solid #8b5a5a;
+    outline: none;
+}
+
+#inner-box {
+    margin: 8px;
+    border: none;
+    background-color: transparent;
+}
+
+#outer-box {
+    margin: 8px;
+    border: none;
+    background-color: transparent;
+}
+
+#text {
+    margin: 5px;
+    color: #d4d4d4;
+}
+
+#entry {
+    margin: 4px;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: transparent;
+    transition: all 0.2s ease;
+    outline: none;  /* Remove outline */
+}
+
+#entry:selected {
+    background-color: rgba(139, 90, 90, 0.25);
+    border-left: 3px solid #8b5a5a;
+    outline: none;  /* Remove outline when selected */
+}
+
+#entry:selected #text {
+    color: #c9a0a0;
+    font-weight: normal;
+}
+
+#entry:hover {
+    background-color: rgba(80, 60, 60, 0.15);
+}
+
+#entry:focus {
+    outline: none;  /* Remove outline on focus */
+}
+

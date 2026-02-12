@@ -1,0 +1,166 @@
+// ==========================================
+// INPUT
+// ==========================================
+
+input {
+    keyboard {
+        xkb {
+            layout "us"
+        }
+        numlock
+    }
+    touchpad {
+      tap
+    }
+
+    }
+
+// ==========================================
+// OUTPUTS (DUAL MONITOR)
+// ==========================================
+
+output "eDP-1" {
+    scale 1
+    transform "normal"
+    position x=0 y=0
+}
+
+output "HDMI-A-1" {
+    scale 1
+    transform "normal"
+    position x=1920 y=0
+}
+
+// ==========================================
+// LAYOUT (MINIMAL DEV MODE)
+// ==========================================
+
+layout {
+    gaps 2
+    center-focused-column "never"
+
+    default-column-width { proportion 0.6; }
+
+    focus-ring {
+        off
+    }
+
+    border {
+        off
+    }
+
+    shadow {
+        off
+    }
+}
+
+prefer-no-csd
+
+animations {
+    //slowdown 0.9
+}
+
+// ==========================================
+// STARTUP PROGRAMS
+// ==========================================
+
+spawn-at-startup "waybar"
+spawn-at-startup "swaync"
+spawn-sh-at-startup "swaybg -i ~/Pictures/wallpaper/guts.jpg"
+spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
+
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+// ==========================================
+// BINDS
+// ==========================================
+
+binds {
+
+    // TERMINAL / LAUNCHER / FILES
+    Mod+Return { spawn "alacritty"; }
+    Mod+D { spawn "wofi" "--show" "drun"; }
+    Mod+E { spawn "thunar"; }
+
+    // CLOSE / LOCK
+    Mod+Q { close-window; }
+    Mod+Escape allow-inhibiting=false { spawn "swaylock"; }
+
+    // FLOAT
+    Mod+V { toggle-window-floating; }
+
+    // FULLSCREEN
+    Mod+F { fullscreen-window; }
+
+    // WAYBAR TOGGLE
+    Mod+B { spawn-sh "killall -SIGUSR1 waybar"; }
+
+    // CLIPHIST MENU
+    Mod+Shift+V {
+        spawn-sh "cliphist list | head -n 50 | wofi --dmenu | cliphist decode | wl-copy";
+    }
+
+    // SCREENSHOT SCRIPT
+    Print { spawn "/home/banzade/.config/hypr/scripts/screenshot.sh"; }
+
+    // FOCUS MOVEMENT
+    Mod+Left  { focus-column-left; }
+    Mod+Right { focus-column-right; }
+    Mod+Up    { focus-window-up; }
+    Mod+Down  { focus-window-down; }
+
+    // MOVE WINDOWS
+    Mod+Ctrl+Left  { move-column-left; }
+    Mod+Ctrl+Right { move-column-right; }
+    Mod+Ctrl+Up    { move-window-up; }
+    Mod+Ctrl+Down  { move-window-down; }
+
+    // WORKSPACES
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+
+    Mod+Ctrl+1 { move-column-to-workspace 1; }
+    Mod+Ctrl+2 { move-column-to-workspace 2; }
+    Mod+Ctrl+3 { move-column-to-workspace 3; }
+    Mod+Ctrl+4 { move-column-to-workspace 4; }
+    Mod+Ctrl+5 { move-column-to-workspace 5; }
+    Mod+Ctrl+6 { move-column-to-workspace 6; }
+    Mod+Ctrl+7 { move-column-to-workspace 7; }
+    Mod+Ctrl+8 { move-column-to-workspace 8; }
+    Mod+Ctrl+9 { move-column-to-workspace 9; }
+
+    // MONITOR FOCUS
+    Mod+Shift+Left  { focus-monitor-left; }
+    Mod+Shift+Right { focus-monitor-right; }
+
+    Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
+    Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
+
+    // VOLUME (PipeWire)
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ -l 1.0"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"; }
+    XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+    XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+
+    // MEDIA KEYS
+    XF86AudioPlay allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    XF86AudioNext allow-when-locked=true { spawn-sh "playerctl next"; }
+    XF86AudioPrev allow-when-locked=true { spawn-sh "playerctl previous"; }
+
+    // BRIGHTNESS
+    XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+5%"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "5%-"; }
+
+    // QUIT
+    Mod+Shift+E { quit; }
+
+    //mission control
+    Mod+O {toggle-overview; }
+}

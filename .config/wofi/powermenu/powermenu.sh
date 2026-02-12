@@ -20,10 +20,10 @@ case $chosen in
         # Adjust this based on your lock screen (swaylock, gtklock, etc.)
         swaylock 
         ;;
-        "⎌ Logout")
+        "⎌ Sleep")
         # Adjust based on your window manager
         # For Sway:
-        swaymsg exit
+        systemctl suspend
         # For Hyprland:
         # hyprctl dispatch exit
         ;;

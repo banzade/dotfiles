@@ -3,11 +3,11 @@
 My personal configuration files for a minimal and productive Arch Linux environment. Managed using the **Bare Git Repository** method to keep `$HOME` clean and symlink-free.
 
 ## 🛠 System Components
-- **WM:** [Hyprland](https://hyprland.org/) (Wayland Compositor)
+- ~**WM:** [Hyprland](https://hyprland.org/) (Wayland Compositor)~
+- **WM:** [niri](https://github.com/niri-wm/niri) (Scrollable wayland)
 - **Bar:** [Waybar](https://github.com/Alexays/Waybar)
 - **Terminal:** [Alacritty](https://alacritty.org/)
-- **Shell:** Zsh (with custom alias management)
-
+- **Shell:** Zsh
 ## 🚀 Quick Start (Restore on New System)
 
 If you are setting this up on a fresh machine, follow these steps:

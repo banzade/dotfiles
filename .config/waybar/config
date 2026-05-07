@@ -3,8 +3,9 @@
     "position": "top",
     "spacing": 0,
     "height": 34,
+
     "modules-left": [
-        "hyprland/workspaces"
+        "custom/overview"
     ],
     "modules-center": [
         "clock"
@@ -13,74 +14,53 @@
         "tray",
         "memory",
         "network",
-	"bluetooth",
+        "bluetooth",
         "wireplumber",
         "battery",
         "custom/power"
     ],
-    "wlr/taskbar": {
-        "format": "{icon}",
-        "on-click": "activate",
-        "on-click-right": "fullscreen",
-        "icon-theme": "WhiteSur",
-        "icon-size": 25,
-        "tooltip-format": "{title}"
+
+    "custom/overview": {
+        "format": "󱗃",
+        "tooltip": false,
+        "on-click": "niri msg action toggle-overview"
     },
-    "hyprland/workspaces": {
-        "on-click": "activate",
-        "format": "{icon}",
-        "format-icons": {
-            "default": "",
-            "1": "1",
-            "2": "2",
-            "3": "3",
-            "4": "4",
-            "5": "5",
-            "6": "6",
-            "7": "7",
-            "8": "8",
-            "9": "9",
-            "active": "󱓻",
-            "urgent": "󱓻"
-        },
-        "persistent-workspaces": {
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": []
-        }
+
+    "niri/workspaces": {
+        "format": "{id}"
     },
+
     "memory": {
         "interval": 5,
         "format": "󰍛 {}%",
         "max-length": 10
     },
+
     "tray": {
-        "spacing": 5
+        "spacing": 6
     },
+
     "clock": {
         "tooltip-format": "{calendar}",
-        "format-alt": "  {:%a, %d %b %Y}",
-        "format": "  {:%I:%M %p}"
+        "format": "{:%a, %d %b   %H:%M}"
     },
+
     "network": {
-        "format-wifi" : "{icon}",
+        "format-wifi": "{icon}",
         "format-icons": ["󰤯","󰤟","󰤢","󰤥","󰤨"],
         "format-ethernet": "󰀂",
-	"format-alt" : "󱛇",
-        "format-disconnected" : "󰖪",
-	"tooltip-format-wifi": "{icon} {essid}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+        "format-alt": "󱛇",
+        "format-disconnected": "󰖪",
+        "tooltip-format-wifi": "{icon} {essid}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
         "tooltip-format-ethernet": "󰀂  {ifname}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
-	"tooltip-format-disconnected": "Disconnected",
-	"on-click": "~/.config/rofi/wifi/wifi.sh &",
+        "tooltip-format-disconnected": "Disconnected",
+        "on-click": "~/.config/rofi/wifi/wifi.sh &",
         "on-click-right": "~/.config/rofi/wifi/wifinew.sh &",
-	"interval": 5,
-	"nospacing": 1
+        "interval": 5
     },
+
     "bluetooth": {
         "format": "{icon}",
-        "nospacing": 1,
         "tooltip-format": "Bluetooth: {status}",
         "format-icons": {
             "enabled": "󰂯",
@@ -89,44 +69,24 @@
         },
         "on-click": "blueman-manager"
     },
+
     "wireplumber": {
-    "format": "{volume}% {icon}",
-    "format-muted": "󰝟",
-    "tooltip-format": "Volume: {volume}%",
-    "format-icons": ["󰕿", "󰖀", "󰕾"],
-    "on-click": "pamixer -t",
-    "on-scroll-up": "pamixer -i 1",
-    "on-scroll-down": "pamixer -d 1"
+        "format": "{icon} {volume}%",
+        "format-muted": "󰝟",
+        "tooltip-format": "Volume: {volume}%",
+        "format-icons": ["󰕿", "󰖀", "󰕾"],
+        "on-click": "pamixer -t",
+        "on-scroll-up": "pamixer -i 1",
+        "on-scroll-down": "pamixer -d 1"
     },
+
     "battery": {
-        "format": "{capacity}% {icon}",
+        "format": "{icon} {capacity}%",
         "format-icons": {
-            "charging": [
-                "󰢜",
-                "󰂆",
-                "󰂇",
-                "󰂈",
-                "󰢝",
-                "󰂉",
-                "󰢞",
-                "󰂊",
-                "󰂋",
-                "󰂅"
-            ],
-            "default": [
-                "󰁺",
-                "󰁻",
-                "󰁼",
-                "󰁽",
-                "󰁾",
-                "󰁿",
-                "󰂀",
-                "󰂁",
-                "󰂂",
-                "󰁹"
-            ]
+            "charging": ["󰢜","󰂆","󰂇","󰂈","󰢝","󰂉","󰢞","󰂊","󰂋","󰂅"],
+            "default":  ["󰁺","󰁻","󰁼","󰁽","󰁾","󰁿","󰂀","󰂁","󰂂","󰁹"]
         },
-        "format-full": "Charged ",
+        "format-full": "󰁹 Full",
         "interval": 5,
         "states": {
             "warning": 20,
@@ -134,9 +94,11 @@
         },
         "tooltip": false
     },
+
     "custom/power": {
         "format": "󰤆",
         "tooltip": false,
         "on-click": "~/.config/wofi/powermenu/powermenu.sh &"
     }
 }
+

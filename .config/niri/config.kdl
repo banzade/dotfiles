@@ -10,10 +10,11 @@ input {
         numlock
     }
     touchpad {
-      tap
+        tap
+        dwt
+        natural-scroll
     }
-
-    }
+}
 
 // ==========================================
 // OUTPUTS (DUAL MONITOR)
@@ -29,6 +30,16 @@ output "HDMI-A-1" {
     scale 1
     transform "normal"
     position x=1920 y=0
+}
+
+hotkey-overlay {
+    // Avoid auto-showing the important hotkeys menu.
+    skip-at-startup
+}
+
+// overview background
+overview {
+  backdrop-color "#0000"
 }
 
 // ==========================================
@@ -52,12 +63,19 @@ layout {
     shadow {
         off
     }
+
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+        proportion 1.0
+    }
 }
 
 prefer-no-csd
 
 animations {
-    //slowdown 0.9
+    // slowdown 0.9
 }
 
 // ==========================================
@@ -77,45 +95,52 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 binds {
 
-    // TERMINAL / LAUNCHER / FILES
+    // --- TERMINAL / LAUNCHER / FILES ---
     Mod+Return { spawn "alacritty"; }
-    Mod+D { spawn "wofi" "--show" "drun"; }
+    Mod+D { spawn "sh" "-c" "pkill wofi || wofi --show drun"; }
     Mod+E { spawn "thunar"; }
 
-    // CLOSE / LOCK
+    // --- CLOSE / LOCK ---
     Mod+Q { close-window; }
     Mod+Escape allow-inhibiting=false { spawn "swaylock"; }
 
-    // FLOAT
+    // --- COLUMN & WINDOW MANAGEMENT ---
     Mod+V { toggle-window-floating; }
+    Mod+F { maximize-column; }            
+    Mod+Shift+F { fullscreen-window; }    
+    
+    // Vertical Stacking
+    Mod+Comma  { consume-window-into-column; }
+    Mod+Period { expel-window-from-column; }
 
-    // FULLSCREEN
-    Mod+F { fullscreen-window; }
+    // Resizing
+    Mod+R { switch-preset-column-width; }
+    Mod+Minus { set-column-width "-10%"; }
+    Mod+Equal { set-column-width "+10%"; }
+    Mod+Shift+Minus { set-window-height "-10%"; }
+    Mod+Shift+Equal { set-window-height "+10%"; }
 
-    // WAYBAR TOGGLE
+    // --- SYSTEM UTILS ---
     Mod+B { spawn-sh "killall -SIGUSR1 waybar"; }
-
-    // CLIPHIST MENU
     Mod+Shift+V {
         spawn-sh "cliphist list | head -n 50 | wofi --dmenu | cliphist decode | wl-copy";
     }
-
-    // SCREENSHOT SCRIPT
     Print { spawn "/home/banzade/.config/hypr/scripts/screenshot.sh"; }
 
-    // FOCUS MOVEMENT
+    // --- FOCUS MOVEMENT ---
     Mod+Left  { focus-column-left; }
     Mod+Right { focus-column-right; }
     Mod+Up    { focus-window-up; }
     Mod+Down  { focus-window-down; }
 
-    // MOVE WINDOWS
+   
+    // --- MOVE WINDOWS ---
     Mod+Ctrl+Left  { move-column-left; }
     Mod+Ctrl+Right { move-column-right; }
     Mod+Ctrl+Up    { move-window-up; }
     Mod+Ctrl+Down  { move-window-down; }
 
-    // WORKSPACES
+    // --- WORKSPACES ---
     Mod+1 { focus-workspace 1; }
     Mod+2 { focus-workspace 2; }
     Mod+3 { focus-workspace 3; }
@@ -136,31 +161,32 @@ binds {
     Mod+Ctrl+8 { move-column-to-workspace 8; }
     Mod+Ctrl+9 { move-column-to-workspace 9; }
 
-    // MONITOR FOCUS
+    // --- MONITOR FOCUS ---
     Mod+Shift+Left  { focus-monitor-left; }
     Mod+Shift+Right { focus-monitor-right; }
 
     Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
     Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
 
-    // VOLUME (PipeWire)
+    // Move to next monitor
+    Mod+Shift+M { move-column-to-monitor-next; }
+
+    // --- VOLUME (PipeWire) ---
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ -l 1.0"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"; }
     XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
     XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
 
-    // MEDIA KEYS
+    // --- MEDIA KEYS ---
     XF86AudioPlay allow-when-locked=true { spawn-sh "playerctl play-pause"; }
     XF86AudioNext allow-when-locked=true { spawn-sh "playerctl next"; }
     XF86AudioPrev allow-when-locked=true { spawn-sh "playerctl previous"; }
 
-    // BRIGHTNESS
+    // --- BRIGHTNESS ---
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+5%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "5%-"; }
 
-    // QUIT
+    // --- QUIT & OVERVIEW ---
     Mod+Shift+E { quit; }
-
-    //mission control
-    Mod+O {toggle-overview; }
+    Mod+O { toggle-overview; }
 }

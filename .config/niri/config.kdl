@@ -1,3 +1,4 @@
+
 // ==========================================
 // INPUT
 // ==========================================
@@ -23,14 +24,15 @@ input {
 output "eDP-1" {
     scale 1
     transform "normal"
+    position x=0 y=1080
+}
+
+output "HDMI-A-3" {
+    scale 1
+    transform "normal"
     position x=0 y=0
 }
 
-output "HDMI-A-1" {
-    scale 1
-    transform "normal"
-    position x=1920 y=0
-}
 
 hotkey-overlay {
     // Avoid auto-showing the important hotkeys menu.
@@ -47,13 +49,15 @@ overview {
 // ==========================================
 
 layout {
-    gaps 2
+    gaps 6
     center-focused-column "never"
 
     default-column-width { proportion 0.6; }
 
     focus-ring {
-        off
+        width 2
+        active-color "#c8bec3"
+        inactive-color "#2a272b"
     }
 
     border {
@@ -108,7 +112,7 @@ binds {
     Mod+V { toggle-window-floating; }
     Mod+F { maximize-column; }            
     Mod+Shift+F { fullscreen-window; }    
-    
+
     // Vertical Stacking
     Mod+Comma  { consume-window-into-column; }
     Mod+Period { expel-window-from-column; }
@@ -162,11 +166,18 @@ binds {
     Mod+Ctrl+9 { move-column-to-workspace 9; }
 
     // --- MONITOR FOCUS ---
-    Mod+Shift+Left  { focus-monitor-left; }
-    Mod+Shift+Right { focus-monitor-right; }
+    Mod+Shift+Up { focus-monitor-up; }
+    Mod+Shift+Down { focus-monitor-down; }
 
-    Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
-    Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
+    // move window to monitor
+    Mod+Shift+Ctrl+Up { move-column-to-monitor-up; }
+    Mod+Shift+Ctrl+Down { move-column-to-monitor-down; }
+
+    //Mod+Shift+Left  { focus-monitor; }
+    //Mod+Shift+Right { focus-monitor-right; }
+
+    //Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
+    //Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
 
     // Move to next monitor
     Mod+Shift+M { move-column-to-monitor-next; }

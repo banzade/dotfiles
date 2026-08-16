@@ -2,14 +2,42 @@
 TERM = "xterm-256color"
 
 [window]
-padding = { x = 10, y = 10 }
-opacity = 1.0
+padding = { x = 14, y = 12 }
+opacity = 0.96
 dynamic_padding = true
-decorations = "Full"
+decorations = "None"
 
 [font]
 normal.family = "JetBrains Mono"
 size = 12.0
+
+[colors.primary]
+background = "#0a090c"
+foreground = "#e7e1e4"
+
+[colors.cursor]
+cursor = "#ff3657"
+text = "#0a090c"
+
+[colors.normal]
+black = "#181217"
+red = "#ff3657"
+green = "#9ce5ad"
+yellow = "#ffc670"
+blue = "#9ab9ff"
+magenta = "#e6a8ff"
+cyan = "#85dce0"
+white = "#c8bec3"
+
+[colors.bright]
+black = "#75666d"
+red = "#ff9baa"
+green = "#c4f1cc"
+yellow = "#ffe0a0"
+blue = "#c1d3ff"
+magenta = "#f0c6ff"
+cyan = "#b8eef0"
+white = "#fff4f6"
 
 [[keyboard.bindings]]
 key = "Return"

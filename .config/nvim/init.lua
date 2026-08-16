@@ -6,7 +6,6 @@ vim.g.maplocalleader = " "
 
 -- Basic Settings
 vim.opt.number = true           -- Show line numbers
-vim.opt.relativenumber = true   -- Relative line numbers
 vim.opt.mouse = 'a'             -- Enable mouse
 vim.opt.ignorecase = true       -- Case insensitive search
 vim.opt.smartcase = true        -- Unless capital letters used
@@ -152,6 +151,14 @@ require("lazy").setup({
           capabilities = capabilities,
         })
 
+        vim.lsp.config('gopls', {
+            cmd = { 'gopls' },
+            filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+            root_markers = { 'go.work', 'go.mod', '.git' },
+            capabilities = capabilities,
+        })
+
+
         vim.lsp.config('ts_ls', {
           cmd = { 'typescript-language-server', '--stdio' },
           filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
@@ -184,6 +191,7 @@ require("lazy").setup({
         vim.lsp.enable('eslint')
         vim.lsp.enable('html')
         vim.lsp.enable('cssls')
+        vim.lsp.enable('gopls')
       else
         -- Fallback to old API for older Neovim versions
         local lspconfig = require("lspconfig")

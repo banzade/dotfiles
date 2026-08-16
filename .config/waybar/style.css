@@ -10,6 +10,7 @@
 
 window#waybar {
     background: transparent;
+    color: #e7e1e4;
 }
 
 window#waybar.hidden {
@@ -31,29 +32,29 @@ window#waybar.hidden {
     border-radius: 6px;
     margin: 5px 2px;
     padding: 3px 10px;
-    background: rgba(10, 10, 10, 0.82);
-    color: #aaaaaa;
+    background: rgba(9, 9, 12, 0.88);
+    color: #b7adb2;
 }
 
 /* ── Overview button ───────────────────────────────────────── */
 
 #custom-overview {
     font-size: 14px;
-    color: #888888;
+    color: #ff9baa;
     padding: 3px 12px;
     margin-left: 6px;
 }
 
 #custom-overview:hover {
-    color: #dddddd;
-    background: rgba(30, 30, 30, 0.88);
+    color: #fff4f6;
+    background: rgba(255, 54, 87, 0.18);
 }
 
 /* ── Workspaces ─────────────────────────────────────────────── */
 
 #workspaces {
     padding: 0 4px;
-    background: rgba(10, 10, 10, 0.82);
+    background: rgba(9, 9, 12, 0.88);
 }
 
 #workspaces button {
@@ -63,16 +64,17 @@ window#waybar.hidden {
     padding: 3px 10px;
     margin: 0 1px;
     border-radius: 4px;
-    color: #555555;
+    color: #75666d;
     transition: all 0.15s ease;
 }
 
 #workspaces button.active {
-    color: #dddddd;
+    color: #fff4f6;
+    background: rgba(255, 54, 87, 0.18);
 }
 
 #workspaces button:hover {
-    color: #aaaaaa;
+    color: #ff9baa;
     box-shadow: none;
     text-shadow: none;
 }
@@ -80,36 +82,36 @@ window#waybar.hidden {
 /* ── Clock ──────────────────────────────────────────────────── */
 
 #clock {
-    color: #cccccc;
+    color: #fff4f6;
     letter-spacing: 0.4px;
 }
 
 /* ── Right modules ──────────────────────────────────────────── */
 
 #memory {
-    color: #777777;
+    color: #968a90;
 }
 
 #battery.warning {
-    color: #c8a86a;
+    color: #ffc670;
 }
 
 #battery.critical {
-    color: #cc7777;
-    background: rgba(40, 15, 15, 0.88);
+    color: #ff9baa;
+    background: rgba(80, 14, 29, 0.88);
 }
 
 #battery.charging {
-    color: #7aaa8a;
+    color: #9ce5ad;
 }
 
 #custom-power {
     margin-right: 6px;
-    color: #666666;
+    color: #968a90;
 }
 
 #custom-power:hover {
-    color: #cc7777;
+    color: #ff3657;
 }
 
 /* ── Tray ───────────────────────────────────────────────────── */
@@ -119,7 +121,7 @@ window#waybar.hidden {
 }
 
 #tray > .needs-attention {
-    background: rgba(40, 15, 15, 0.88);
+    background: rgba(80, 14, 29, 0.88);
 }
 
 /* ── Tooltip ────────────────────────────────────────────────── */
@@ -127,11 +129,11 @@ window#waybar.hidden {
 tooltip {
     border-radius: 6px;
     padding: 8px;
-    background: rgba(10, 10, 10, 0.95);
-    border: 1px solid #2a2a2a;
+    background: rgba(9, 9, 12, 0.96);
+    border: 1px solid rgba(231, 225, 228, 0.12);
 }
 
 tooltip label {
     padding: 2px 4px;
-    color: #cccccc;
+    color: #e7e1e4;
 }

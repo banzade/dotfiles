@@ -2,10 +2,11 @@
     "layer": "top",
     "position": "top",
     "spacing": 0,
-    "height": 34,
+    "height": 38,
 
     "modules-left": [
-        "custom/overview"
+        "custom/overview",
+        "niri/workspaces"
     ],
     "modules-center": [
         "clock"
@@ -27,7 +28,7 @@
     },
 
     "niri/workspaces": {
-        "format": "{id}"
+        "format": "{value}"
     },
 
     "memory": {
@@ -101,4 +102,3 @@
         "on-click": "~/.config/wofi/powermenu/powermenu.sh &"
     }
 }
-

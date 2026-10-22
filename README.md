@@ -1,19 +1,24 @@
 # Arch Linux dotfiles
 
-Personal configuration for a Niri-based, Wayland desktop on Arch Linux. The
-repository keeps its Git data in `~/.dotfiles` while the files stay in their
-normal locations under `$HOME`.
+Personal configuration for a **Niri + DankMaterialShell** Wayland desktop on
+Arch Linux. The repository keeps its Git data in `~/.dotfiles` while the files
+stay in their normal locations under `$HOME`.
 
 ## Included
 
 | Area | Configuration |
 | --- | --- |
-| Compositor | Niri |
-| Bar | Waybar |
-| Launcher | Wofi |
-| Terminal and shell | Alacritty, Zsh, Powerlevel10k |
+| Compositor | Niri (`<niri/>` scrollable tiling) |
+| Desktop shell | DankMaterialShell (DMS) on Quickshell — bar, control center (wifi/bluetooth lists, per-app audio, battery info), notifications, spotlight launcher, dock, clipboard, lock screen, screenshots |
+| Login manager | greetd + tuigreet |
+| Terminal and shell | Alacritty, Zsh, Oh My Zsh, Powerlevel10k |
+| Launcher | DMS Spotlight (`Mod+Space`, also `Mod+D`) |
+| File manager | Dolphin (dark via the XDG portal color scheme) |
 | Editor | Neovim |
-| Lock screen | Swaylock |
+| Clipboard | gl.clipboard-style history via `wl-clipboard` + `cliphist` (DMS UI) |
+| Lock screen | DMS lockscreen (`Mod+Esc` / `Mod+Alt+L`) |
+| Theming | matugen dynamic colors from the DMS-managed wallpaper, Adwaita-dark GTK, Papirus icons |
+| Fonts | `adwaita-fonts`, `ttf-jetbrains-mono-nerd` |
 
 ## Use on this machine
 
@@ -28,38 +33,111 @@ Use it like normal Git:
 ```bash
 dotfiles status
 dotfiles diff
-dotfiles add .config/waybar/config
-dotfiles commit -m 'Update Waybar'
+dotfiles add .config/niri/config.kdl
+dotfiles commit -m 'Update niri config'
 dotfiles push
 ```
 
 `status.showUntrackedFiles` is disabled so normal files in `$HOME` do not
-overwhelm `dotfiles status`. Add a new configuration explicitly when it is
-worth keeping.
+overwhelm `dotfiles status` — new files will not show up in `status` unless you
+`add` the enclosing path explicitly.
 
 ## Restore on a new machine
 
-Install `git`, then clone the repository and check it out into `$HOME`:
+1. Install `git` and `zsh`, then clone the repository into `$HOME`:
 
 ```bash
 git clone --bare git@github.com:banzade/dotfiles.git "$HOME/.dotfiles"
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-dotfiles checkout
-dotfiles config --local status.showUntrackedFiles no
+git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME" checkout
+git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME" \
+  config --local status.showUntrackedFiles no
 ```
 
 If checkout reports conflicts, move only the listed files somewhere safe,
-then run `dotfiles checkout` again. Do not overwrite an existing configuration
-until you have inspected it.
+then run checkout again. Do not overwrite an existing configuration until you
+have inspected it.
 
-## After restoring
+2. Install the packages. Core desktop (some pull their own deps):
 
-Install the programs used by the tracked configuration, then sign out and back
-in. At a minimum the desktop needs Niri, Waybar, Alacritty, Wofi, Swaylock,
-Zsh, and the configured clipboard, audio, network, and brightness utilities.
+```bash
+sudo pacman -S --needed \
+  niri dms-shell quickshell accountsservice matugen qt6-multimedia \
+  alacritty zsh nvim \
+  dolphin breeze network-manager-applet \
+  pipewire pipewire-pulse pipewire-alsa pipewire-audio wireplumber \
+  networkmanager bluez brightnessctl playerctl pamixer pavucontrol \
+  cliphist wl-clipboard upower grim slurp \
+  xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr \
+  adwaita-fonts ttf-jetbrains-mono-nerd papirus-icon-theme \
+  git greetd tuigreet qt6-wayland \
+  ffmpeg btop htop curl wget gnupg unzip
+```
 
-Package lists are intentionally not tracked here: they are machine-specific.
-To save one before rebuilding a machine:
+3. Oh My Zsh + Powerlevel10k:
+
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
+  "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"/themes/powerlevel10k
+chsh -s /usr/bin/zsh
+```
+
+4. Minimum post-restore tweaks:
+
+```bash
+# unified dark mode for GTK and (via portals) Qt apps like Dolphin
+gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+xdg-mime default org.kde.dolphin.desktop inode/directory
+
+# make DMS own the wallpaper (it also drives matugen theming)
+dms ipc call wallpaper set ~/Pictures/wallpaper/guts-bw.jpg
+```
+
+5. greetd (`/etc/greetd/config.toml`) starts the session with:
+
+```toml
+[default_session]
+user = "greeter"
+command = "tuigreet --time --greeting 'Welcome back' --remember --remember-user-session --user-menu --asterisks --cmd niri"
+```
+
+Or from a plain tty: run niri directly (it reads `spawn-at-startup` from the
+restored configuration, which launches DMS, cliphist, and the wallpaper
+daemon). DMS on first launch shows a small welcome/setup screen.
+
+## Keybind cheat sheet
+
+| Key | Action |
+| --- | --- |
+| `Mod+Return` | terminal (alacritty) |
+| `Mod+Space` / `Mod+D` | DMS Spotlight (app search) |
+| `Mod+E` | file manager (Dolphin) |
+| `Mod+N` | notification center |
+| `Mod+V` | clipboard manager |
+| `Mod+M` / `Ctrl+Alt+Del` | task manager |
+| `Mod+Q` | close window |
+| `Mod+F` / `Mod+Shift+F` | maximize / fullscreen |
+| `Mod+Shift+T` | toggle floating |
+| `Mod+1..9` | workspaces |
+| `Mod+P` | display profile |
+| `Print` / `Ctrl+Print` / `Alt+Print` | screenshot region / full / window |
+| `XF86Audio*` / `XF86MonBrightness*` | volume / media / brightness |
+| `Mod+Esc` | lock screen |
+| `Mod+Shift+X` / `Mod+X` | DMS power menu |
+
+The complete, authoritative list lives in `.config/niri/dms/binds.kdl`
+(auto-generated by DMS) with personal overrides in the custom `binds` block of
+`.config/niri/config.kdl`.
+
+## Maintenance notes
+
+- DMS regenerates `.config/niri/dms/{layout,alttab,...}.kdl` at runtime; treat
+  `dms/binds.kdl` as generated, and keep personal binds in `config.kdl`.
+- `dms setup headless --compositor niri` can redeploy DMS default fragments on
+  a new box, but the checked-in copies are already included.
+- Package lists are intentionally mostly not tracked: they are
+  machine-specific. Save one before rebuilding a machine:
 
 ```bash
 pacman -Qqe > "$HOME/pkglist.txt"

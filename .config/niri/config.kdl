@@ -7,6 +7,10 @@ include "dms/alttab.kdl"
 // INPUT
 // ==========================================
 
+environment {
+    QT_QPA_PLATFORMTHEME "xdgdesktopportal"
+}
+
 input {
     keyboard {
         xkb {
@@ -103,7 +107,7 @@ binds {
     // --- TERMINAL / FILES (Spotlight = Mod+Space, also mapped to Mod+D) ---
     Mod+Return { spawn "alacritty"; }
     Mod+D { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
-    Mod+E { spawn "thunar"; }
+    Mod+E { spawn "dolphin"; }
 
     // --- POWER MENU (DMS UI, same as the bar icon) ---
     Mod+Shift+X { spawn "dms" "ipc" "call" "powermenu" "toggle"; }

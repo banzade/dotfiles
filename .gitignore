@@ -1,4 +1,10 @@
 .dotfiles
+AGENTS.md
 .config/DankMaterialShell/.firstlaunch
 .config/DankMaterialShell/.changelog-*
 .zshenv
+.env
+.env.*
+*.env
+*.pem
+*.key

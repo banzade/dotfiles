@@ -114,4 +114,8 @@ binds {
 
     // --- LOCK (override DMS shortcut-inhibit toggle) ---
     Mod+Escape allow-inhibiting=false { spawn "dms" "ipc" "call" "lock" "lock"; }
+
+    // --- MONITOR FOCUS (old muscle memory; DMS uses Mod+Shift+arrows to move windows) ---
+    Mod+Shift+Up   { focus-monitor-up; }
+    Mod+Shift+Down { focus-monitor-down; }
 }

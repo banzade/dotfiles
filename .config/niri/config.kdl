@@ -1,3 +1,7 @@
+// DMS (DankMaterialShell) binds are included from dms/binds.kdl
+include "dms/binds.kdl"
+// Alt-tab overview styling for DMS
+include "dms/alttab.kdl"
 
 // ==========================================
 // INPUT
@@ -86,118 +90,24 @@ animations {
 // STARTUP PROGRAMS
 // ==========================================
 
-spawn-at-startup "waybar"
-spawn-at-startup "swaync"
-spawn-sh-at-startup "swaybg -i ~/Pictures/wallpaper/guts.jpg"
+spawn-at-startup "dms" "run"
 spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
-
-screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 // ==========================================
 // BINDS
 // ==========================================
+// Core keybinds live in dms/binds.kdl (notification center = Mod+N etc.).
+// Personal app binds and DMS-conflict overrides only here:
 
 binds {
-
-    // --- TERMINAL / LAUNCHER / FILES ---
+    // --- TERMINAL / FILES (Spotlight = Mod+Space, also mapped to Mod+D) ---
     Mod+Return { spawn "alacritty"; }
-    Mod+D { spawn "sh" "-c" "pkill wofi || wofi --show drun"; }
+    Mod+D { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
     Mod+E { spawn "thunar"; }
 
-    // --- CLOSE / LOCK ---
-    Mod+Q { close-window; }
-    Mod+Escape allow-inhibiting=false { spawn "swaylock"; }
+    // --- POWER MENU (DMS UI, same as the bar icon) ---
+    Mod+Shift+X { spawn "dms" "ipc" "call" "powermenu" "toggle"; }
 
-    // --- COLUMN & WINDOW MANAGEMENT ---
-    Mod+V { toggle-window-floating; }
-    Mod+F { maximize-column; }            
-    Mod+Shift+F { fullscreen-window; }    
-
-    // Vertical Stacking
-    Mod+Comma  { consume-window-into-column; }
-    Mod+Period { expel-window-from-column; }
-
-    // Resizing
-    Mod+R { switch-preset-column-width; }
-    Mod+Minus { set-column-width "-10%"; }
-    Mod+Equal { set-column-width "+10%"; }
-    Mod+Shift+Minus { set-window-height "-10%"; }
-    Mod+Shift+Equal { set-window-height "+10%"; }
-
-    // --- SYSTEM UTILS ---
-    Mod+B { spawn-sh "killall -SIGUSR1 waybar"; }
-    Mod+Shift+V {
-        spawn-sh "cliphist list | head -n 50 | wofi --dmenu | cliphist decode | wl-copy";
-    }
-    Print { spawn "/home/banzade/.config/hypr/scripts/screenshot.sh"; }
-
-    // --- FOCUS MOVEMENT ---
-    Mod+Left  { focus-column-left; }
-    Mod+Right { focus-column-right; }
-    Mod+Up    { focus-window-up; }
-    Mod+Down  { focus-window-down; }
-
-   
-    // --- MOVE WINDOWS ---
-    Mod+Ctrl+Left  { move-column-left; }
-    Mod+Ctrl+Right { move-column-right; }
-    Mod+Ctrl+Up    { move-window-up; }
-    Mod+Ctrl+Down  { move-window-down; }
-
-    // --- WORKSPACES ---
-    Mod+1 { focus-workspace 1; }
-    Mod+2 { focus-workspace 2; }
-    Mod+3 { focus-workspace 3; }
-    Mod+4 { focus-workspace 4; }
-    Mod+5 { focus-workspace 5; }
-    Mod+6 { focus-workspace 6; }
-    Mod+7 { focus-workspace 7; }
-    Mod+8 { focus-workspace 8; }
-    Mod+9 { focus-workspace 9; }
-
-    Mod+Ctrl+1 { move-column-to-workspace 1; }
-    Mod+Ctrl+2 { move-column-to-workspace 2; }
-    Mod+Ctrl+3 { move-column-to-workspace 3; }
-    Mod+Ctrl+4 { move-column-to-workspace 4; }
-    Mod+Ctrl+5 { move-column-to-workspace 5; }
-    Mod+Ctrl+6 { move-column-to-workspace 6; }
-    Mod+Ctrl+7 { move-column-to-workspace 7; }
-    Mod+Ctrl+8 { move-column-to-workspace 8; }
-    Mod+Ctrl+9 { move-column-to-workspace 9; }
-
-    // --- MONITOR FOCUS ---
-    Mod+Shift+Up { focus-monitor-up; }
-    Mod+Shift+Down { focus-monitor-down; }
-
-    // move window to monitor
-    Mod+Shift+Ctrl+Up { move-column-to-monitor-up; }
-    Mod+Shift+Ctrl+Down { move-column-to-monitor-down; }
-
-    //Mod+Shift+Left  { focus-monitor; }
-    //Mod+Shift+Right { focus-monitor-right; }
-
-    //Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
-    //Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
-
-    // Move to next monitor
-    Mod+Shift+M { move-column-to-monitor-next; }
-
-    // --- VOLUME (PipeWire) ---
-    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ -l 1.0"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"; }
-    XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
-    XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
-
-    // --- MEDIA KEYS ---
-    XF86AudioPlay allow-when-locked=true { spawn-sh "playerctl play-pause"; }
-    XF86AudioNext allow-when-locked=true { spawn-sh "playerctl next"; }
-    XF86AudioPrev allow-when-locked=true { spawn-sh "playerctl previous"; }
-
-    // --- BRIGHTNESS ---
-    XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+5%"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "5%-"; }
-
-    // --- QUIT & OVERVIEW ---
-    Mod+Shift+E { quit; }
-    Mod+O { toggle-overview; }
+    // --- LOCK (override DMS shortcut-inhibit toggle) ---
+    Mod+Escape allow-inhibiting=false { spawn "dms" "ipc" "call" "lock" "lock"; }
 }

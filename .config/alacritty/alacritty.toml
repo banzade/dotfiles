@@ -1,23 +1,95 @@
+# ── General ────────────────────────────────────────────────────────────────────
+[general]
+live_config_reload = true
+
 [env]
 TERM = "xterm-256color"
+
+[terminal]
+# Allow remote ssh sessions to write their own copy to your clipboard.
+osc52 = "CopyPaste"
 
 [window]
 padding = { x = 14, y = 12 }
 opacity = 0.96
+blur = true
 dynamic_padding = true
 decorations = "None"
+dynamic_title = true
 
+[scrolling]
+history = 100000
+multiplier = 5
+
+# ── Font ───────────────────────────────────────────────────────────────────────
 [font]
-normal.family = "JetBrains Mono"
+normal.family = "JetBrains Mono Nerd Font Mono"
+bold.family = "JetBrains Mono Nerd Font Mono"
+italic.family = "JetBrains Mono Nerd Font Mono"
+bold_italic.family = "JetBrains Mono Nerd Font Mono"
 size = 12.0
+offset = { y = 1 }
 
+# ── Cursor ─────────────────────────────────────────────────────────────────────
+[cursor]
+style = { shape = "Beam", blinking = "On" }
+vi_mode_style = { shape = "Block", blinking = "On" }
+unfocused_hollow = true
+
+# ── Behavior ───────────────────────────────────────────────────────────────────
+# Middle-click select still copies to primary; this also mirrors to system clipboard.
+[selection]
+save_to_clipboard = true
+
+[mouse]
+hide_when_typing = true
+
+[bell]
+animation = "Linear"
+duration = 0
+color = "#ff3657"
+
+# ── Hints: Alt+click opens URLs ────────────────────────────────────────────────
+[hints]
+alphabet = "jfkdlsahgtnruwya"
+
+[[hints.enabled]]
+command = { program = "xdg-open", args = [] }
+hyperlinks = true
+post_processing = true
+persist = false
+mouse = { enabled = true, mods = "Alt" }
+binding = { key = "O", mods = "Control|Shift" }
+regex = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)\\x2b[^\\u0000-\\u001f\\u007f-\\uffff<>\"\\\\s]-"
+
+# ── Keybinds ───────────────────────────────────────────────────────────────────
+[keyboard]
+bindings = [
+  { key = "Return", mods = "Shift", chars = "\u001B\r" },
+  # Font size
+  { key = "Plus", mods = "Control", action = "IncreaseFontSize" },
+  { key = "Minus", mods = "Control", action = "DecreaseFontSize" },
+  { key = "Key0", mods = "Control", action = "ResetFontSize" },
+]
+
+# ── Palette (dank) ─────────────────────────────────────────────────────────────
 [colors.primary]
 background = "#0a090c"
 foreground = "#e7e1e4"
+dim_foreground = "#8b828a"
+bright_foreground = "#fff4f6"
 
 [colors.cursor]
 cursor = "#ff3657"
 text = "#0a090c"
+
+[colors.vi_mode_cursor]
+cursor = "#ffc670"
+text = "#0a090c"
+
+[colors.selection]
+text = "#e7e1e4"
+background = "#3b2230"
 
 [colors.normal]
 black = "#181217"
@@ -39,7 +111,22 @@ magenta = "#f0c6ff"
 cyan = "#b8eef0"
 white = "#fff4f6"
 
-[[keyboard.bindings]]
-key = "Return"
-mods = "Shift"
-chars = "\u001B\r"
+[colors.search.matches]
+foreground = "#0a090c"
+background = "#ffc670"
+
+[colors.search.focused_match]
+foreground = "#0a090c"
+background = "#ff3657"
+
+[colors.hints.start]
+foreground = "#0a090c"
+background = "#ffc670"
+
+[colors.hints.end]
+foreground = "#0a090c"
+background = "#85dce0"
+
+[colors.footer_bar]
+foreground = "#e7e1e4"
+background = "#181217"

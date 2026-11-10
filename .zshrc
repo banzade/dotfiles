@@ -130,9 +130,15 @@ alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# fnm (Node version manager, fast)
+eval "$(fnm env --use-on-cd --shell zsh)"
+
+# nvm fallback (kept; comment/uncomment to switch)
+if false; then
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
 
 
 
@@ -141,3 +147,4 @@ export PATH=/home/banzade/.opencode/bin:$PATH
 
 # Added by cua-driver-rs installer — see https://github.com/trycua/cua
 export PATH="/home/banzade/.local/bin:$PATH"
+

@@ -1,10 +1,29 @@
-.dotfiles
-AGENTS.md
-.config/DankMaterialShell/.firstlaunch
-.config/DankMaterialShell/.changelog-*
+# ── Secrets and environment (never commit) ────────────────────────────────────
 .zshenv
 .env
 .env.*
 *.env
 *.pem
 *.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*_rsa
+*_ed25519
+*.kdbx
+
+# ── Local agent/session notes ─────────────────────────────────────────────────
+AGENTS.md
+
+# ── Runtime/generated files (apps write these) ────────────────────────────────
+alacritty/.config/alacritty/dank-theme.toml
+dms/.config/dms/.firstlaunch
+dms/.config/dms/.changelog-*
+
+# ── OS/editor junk ────────────────────────────────────────────────────────────
+**/*.bak
+**/*~
+**/*.swp
+**/*.swo
+.DS_Store

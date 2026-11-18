@@ -8,6 +8,8 @@ TERM = "xterm-256color"
 [terminal]
 # Allow remote ssh sessions to write their own copy to your clipboard.
 osc52 = "CopyPaste"
+# Launch an interactive login shell so PATH/profile changes are picked up.
+shell = { program = "/bin/zsh", args = ["-l"] }
 
 [window]
 padding = { x = 14, y = 12 }
@@ -40,9 +42,15 @@ unfocused_hollow = true
 # Middle-click select still copies to primary; this also mirrors to system clipboard.
 [selection]
 save_to_clipboard = true
+# Double-click selects paths/URLs/hashes as one word instead of stopping at punctuation.
+semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
 
 [mouse]
 hide_when_typing = true
+bindings = [
+  # X11/primary-selection paste with the middle mouse button.
+  { mouse = "Middle", action = "PasteSelection" },
+]
 
 [bell]
 animation = "Linear"
@@ -62,10 +70,32 @@ mouse = { enabled = true, mods = "Alt" }
 binding = { key = "O", mods = "Control|Shift" }
 regex = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)\\x2b[^\\u0000-\\u001f\\u007f-\\uffff<>\"\\\\s]-"
 
+# Ctrl+Shift+P opens local paths (handy for compiler/test output).
+[[hints.enabled]]
+command = { program = "xdg-open", args = [] }
+post_processing = true
+persist = false
+binding = { key = "P", mods = "Control|Shift" }
+regex = "(?:(?:~|\\.{1,2})/|/(?:home|etc|usr|tmp|opt|var|mnt|media|srv|run|nix)/)[^\\s\"'`<>|,;:]+"
+
 # ── Keybinds ───────────────────────────────────────────────────────────────────
 [keyboard]
 bindings = [
   { key = "Return", mods = "Shift", chars = "\u001B\r" },
+
+  # Clipboard and windows
+  { key = "C", mods = "Control|Shift", action = "Copy" },
+  { key = "V", mods = "Control|Shift", action = "Paste" },
+  { key = "Insert", mods = "Shift", action = "Paste" },
+  { key = "N", mods = "Control|Shift", action = "SpawnNewInstance" },
+
+  # Scrollback search and vi mode
+  { key = "F", mods = "Control|Shift", action = "SearchForward" },
+  { key = "Space", mods = "Control|Shift", action = "ToggleViMode" },
+
+  # Shell-style word erase (Ctrl+Backspace) used by zsh/readline/vim
+  { key = "Back", mods = "Control", chars = "\u0017" },
+
   # Font size
   { key = "Plus", mods = "Control", action = "IncreaseFontSize" },
   { key = "Minus", mods = "Control", action = "DecreaseFontSize" },

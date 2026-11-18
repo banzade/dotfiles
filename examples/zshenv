@@ -1,0 +1,13 @@
+# Template for ~/.zshenv — copy it and fill in your own values.
+#
+#   cp ~/dotfiles/examples/zshenv ~/.zshenv
+#
+# ~/.zshenv is deliberately NOT tracked by this repository: it is sourced by
+# every zsh invocation (including non-interactive ones) and often holds
+# machine-specific paths, tokens, or API keys.
+
+# Rust toolchain
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
+# Secrets — keep them here, never in the tracked dotfiles
+# export OPENROUTER_API_KEY=""

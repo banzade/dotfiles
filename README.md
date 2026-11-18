@@ -1,63 +1,123 @@
 # Arch Linux dotfiles
 
 Personal configuration for a **Niri + DankMaterialShell** Wayland desktop on
-Arch Linux. The repository keeps its Git data in `~/.dotfiles` while the files
-stay in their normal locations under `$HOME`.
+Arch Linux. The repository is a normal Git checkout in `~/dotfiles`, split into
+[GNU Stow](https://www.gnu.org/software/stow/) packages that are symlinked into
+`$HOME`.
+
+## Layout
+
+Every top-level directory is a package whose contents mirror `$HOME`:
+
+```text
+~/dotfiles/
+├── alacritty/.config/alacritty/     # Alacritty (developer-oriented config)
+├── dms/.config/dms/                 # DankMaterialShell settings + theme
+├── git/.gitconfig                   # Git identity and defaults
+├── niri/.config/niri/               # Niri config and generated DMS fragments
+├── nvim/.config/nvim/               # Neovim (lazy.nvim, pinned lazy-lock.json)
+├── swaylock/.config/swaylock/
+├── zsh/.zshrc
+├── zsh/.p10k.zsh
+├── examples/zshenv                  # template for the untracked ~/.zshenv
+├── install.sh                       # stow all packages into $HOME
+└── README.md
+```
+
+The real files live in the repository. `$HOME` only holds symlinks, for example:
+
+```text
+~/.config/niri            -> ../dotfiles/niri/.config/niri
+~/.config/nvim            -> ../dotfiles/nvim/.config/nvim
+~/.zshrc                  -> dotfiles/zsh/.zshrc
+~/.gitconfig              -> dotfiles/git/.gitconfig
+~/.config/DankMaterialShell -> dms   # compatibility alias kept by DMS
+```
+
+Editing any of those paths edits the tracked file directly. Hyprland support was
+removed; Niri is the only compositor configured here.
 
 ## Included
 
 | Area | Configuration |
 | --- | --- |
-| Compositor | Niri (`<niri/>` scrollable tiling) |
-| Desktop shell | DankMaterialShell (DMS) on Quickshell — bar, control center (wifi/bluetooth lists, per-app audio, battery info), notifications, spotlight launcher, dock, clipboard, lock screen, screenshots |
+| Compositor | Niri (scrollable tiling) |
+| Desktop shell | DankMaterialShell (DMS) on Quickshell — bar, control center, notifications, spotlight, dock, clipboard, lock screen, screenshots |
 | Login manager | greetd + tuigreet |
-| Terminal and shell | Alacritty, Zsh, Oh My Zsh, Powerlevel10k |
+| Terminal | Alacritty with developer defaults (see below) |
+| Shell | Zsh, Oh My Zsh, Powerlevel10k |
 | Launcher | DMS Spotlight (`Mod+Space`, also `Mod+D`) |
 | File manager | Dolphin (dark via the XDG portal color scheme) |
 | Editor | Neovim |
-| Clipboard | gl.clipboard-style history via `wl-clipboard` + `cliphist` (DMS UI) |
+| Clipboard | `wl-clipboard` + `cliphist` (DMS UI) |
 | Lock screen | DMS lockscreen (`Mod+Esc` / `Mod+Alt+L`) |
 | Theming | matugen dynamic colors from the DMS-managed wallpaper, Adwaita-dark GTK, Papirus icons |
 | Fonts | `adwaita-fonts`, `ttf-jetbrains-mono-nerd` |
 
-## Use on this machine
+## Daily workflow
 
-The shell already defines this alias:
+The shell defines `dotfiles` as a shortcut:
 
 ```bash
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias dotfiles='git -C "$HOME/dotfiles"'
 ```
 
-Use it like normal Git:
+Edit files at their normal paths, then work in the repository:
 
 ```bash
 dotfiles status
 dotfiles diff
-dotfiles add .config/niri/config.kdl
-dotfiles commit -m 'Update niri config'
+dotfiles add niri/.config/niri/config.kdl
+dotfiles commit -m "niri: adjust workspace binds"
 dotfiles push
 ```
 
-`status.showUntrackedFiles` is disabled so normal files in `$HOME` do not
-overwhelm `dotfiles status` — new files will not show up in `status` unless you
-`add` the enclosing path explicitly.
+Because the repository is a regular checkout, `git -C ~/dotfiles …` works too.
+
+### Add or change a package
+
+```bash
+mkdir -p ~/dotfiles/<package>/.config/<app>
+mv ~/.config/<app> ~/dotfiles/<package>/.config/<app>
+cd ~/dotfiles && stow -t "$HOME" <package>
+```
+
+Add the package name to `PACKAGES` in `install.sh` so a fresh machine links it
+too. Removing a package: `cd ~/dotfiles && stow -D -t "$HOME" <package>`.
+
+### Secrets
+
+`~/.zshenv` is intentionally **not** tracked — it is sourced by every zsh
+process and holds machine-specific paths and API keys. Start from the template:
+
+```bash
+cp ~/dotfiles/examples/zshenv ~/.zshenv
+$EDITOR ~/.zshenv
+```
+
+`.env`, `.env.*`, `*.env`, key material, and other secrets are ignored by
+`.gitignore`. Never commit them.
 
 ## Restore on a new machine
 
-1. Install `git` and `zsh`, then clone the repository into `$HOME`:
+1. Install `git`, `stow`, and `zsh`:
 
 ```bash
-git clone --bare git@github.com:banzade/dotfiles.git "$HOME/.dotfiles"
-git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME" checkout
-git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME" \
-  config --local status.showUntrackedFiles no
+sudo pacman -S --needed git stow zsh
 ```
 
-If checkout reports conflicts, move only the listed files somewhere safe,
-then run checkout again. Do not overwrite an existing configuration until you
-have inspected it.
+2. Clone and link:
 
-2. Install the packages. Core desktop (some pull their own deps):
+```bash
+git clone git@github.com:banzade/dotfiles.git "$HOME/dotfiles"
+"$HOME/dotfiles/install.sh"
+cp "$HOME/dotfiles/examples/zshenv" "$HOME/.zshenv"   # then add secrets
+```
+
+If a target already exists, Stow refuses to overwrite it. Move the existing file
+aside, re-run `install.sh`, then merge anything worth keeping.
+
+3. Install the desktop packages (some pull their own dependencies):
 
 ```bash
 sudo pacman -S --needed \
@@ -69,11 +129,11 @@ sudo pacman -S --needed \
   cliphist wl-clipboard upower grim slurp \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr \
   adwaita-fonts ttf-jetbrains-mono-nerd papirus-icon-theme \
-  git greetd tuigreet qt6-wayland \
+  git stow greetd tuigreet qt6-wayland \
   ffmpeg btop htop curl wget gnupg unzip
 ```
 
-3. Oh My Zsh + Powerlevel10k:
+4. Oh My Zsh + Powerlevel10k (the config is already tracked):
 
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -82,7 +142,7 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
 chsh -s /usr/bin/zsh
 ```
 
-4. Minimum post-restore tweaks:
+5. Post-restore tweaks:
 
 ```bash
 # unified dark mode for GTK and (via portals) Qt apps like Dolphin
@@ -94,7 +154,7 @@ xdg-mime default org.kde.dolphin.desktop inode/directory
 dms ipc call wallpaper set ~/Pictures/wallpaper/guts-bw.jpg
 ```
 
-5. greetd (`/etc/greetd/config.toml`) starts the session with:
+6. greetd (`/etc/greetd/config.toml`) starts the session with:
 
 ```toml
 [default_session]
@@ -102,15 +162,29 @@ user = "greeter"
 command = "tuigreet --time --greeting 'Welcome back' --remember --remember-user-session --user-menu --asterisks --cmd niri"
 ```
 
-Or from a plain tty: run niri directly (it reads `spawn-at-startup` from the
-restored configuration, which launches DMS, cliphist, and the wallpaper
-daemon). DMS on first launch shows a small welcome/setup screen.
+Or run `niri` from a plain tty; `spawn-at-startup` launches DMS, cliphist, and
+the wallpaper watcher.
+
+## Alacritty developer defaults
+
+Beyond the baseline, `alacritty.toml` adds:
+
+- login Zsh (`/bin/zsh -l`) so profile/PATH changes apply
+- OSC 52 clipboard for SSH sessions
+- `Ctrl+Shift+C/V`, `Shift+Insert`, and middle-click paste
+- `Ctrl+Shift+N` new instance (inherits the current directory)
+- `Ctrl+Shift+F` scrollback search, `Ctrl+Shift+Space` vi mode
+- `Ctrl+Backspace` word erase (zsh/readline/vim friendly)
+- semantic double-click selection for paths, URLs, and hashes
+- `Alt+click` on URLs and `Ctrl+Shift+O` hint mode to open links
+- `Ctrl+Shift+P` hint mode to open file paths from compiler/test output
+- 100k line scrollback and live config reload
 
 ## Keybind cheat sheet
 
 | Key | Action |
 | --- | --- |
-| `Mod+Return` | terminal (alacritty) |
+| `Mod+Return` | terminal (Alacritty) |
 | `Mod+Space` / `Mod+D` | DMS Spotlight (app search) |
 | `Mod+E` | file manager (Dolphin) |
 | `Mod+N` | notification center |
@@ -126,18 +200,16 @@ daemon). DMS on first launch shows a small welcome/setup screen.
 | `Mod+Esc` | lock screen |
 | `Mod+Shift+X` / `Mod+X` | DMS power menu |
 
-The complete, authoritative list lives in `.config/niri/dms/binds.kdl`
-(auto-generated by DMS) with personal overrides in the custom `binds` block of
-`.config/niri/config.kdl`.
+The authoritative list is `niri/.config/niri/dms/binds.kdl` (generated by DMS)
+plus the personal `binds` block in `niri/.config/niri/config.kdl`.
 
 ## Maintenance notes
 
-- DMS regenerates `.config/niri/dms/{layout,alttab,...}.kdl` at runtime; treat
-  `dms/binds.kdl` as generated, and keep personal binds in `config.kdl`.
-- `dms setup headless --compositor niri` can redeploy DMS default fragments on
-  a new box, but the checked-in copies are already included.
-- Package lists are intentionally mostly not tracked: they are
-  machine-specific. Save one before rebuilding a machine:
+- DMS regenerates `niri/.config/niri/dms/{layout,alttab,binds,...}.kdl` at
+  runtime; review diffs before committing them.
+- `alacritty/.config/alacritty/dank-theme.toml` is generated by matugen/DMS and
+  ignored.
+- Package lists are mostly machine-specific. Save a rebuild list when needed:
 
 ```bash
 pacman -Qqe > "$HOME/pkglist.txt"

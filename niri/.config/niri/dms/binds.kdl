@@ -124,6 +124,7 @@ binds {
     Mod+Ctrl+L     { focus-monitor-right; }
 
     // === Move to Monitor ===
+    Mod+Shift+M hotkey-overlay-title="Move Window to Other Monitor" { move-column-to-monitor-previous; }
     Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
     Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
     Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
